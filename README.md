@@ -39,3 +39,8 @@ The repository is initialized. The detailed product specification and phased roa
 
 The application scaffold and deployment configuration will be added in the implementation phase. Do not add production credentials to this repository.
 \n\n## Important production setup\n\nThe OAuth flow is a development-grade first connection, not the final least-privilege installation model. For production use, configure a GitHub App with read-only repository metadata, contents, pull request, issue, and Actions permissions as needed, and let users select installations/repositories. Do not deploy with the broad OAuth `repo` scope as the final permission model.\n
+## Project plan control
+
+Open **Planner** from the Sentinel dashboard. Choose a repository, edit its project plan, and select Cursor, ChatGPT, or Claude for the execution handoff. When you click **Run plan**, Sentinel compares the edited plan with the current `plan.md`, creates the file if it is missing, appends a timestamped change summary, and commits the result to that repository.
+
+The current agent connection is a handoff workflow: Sentinel saves the plan and prepares a prompt to copy into the selected agent. It does not silently execute code changes inside Cursor, ChatGPT, or Claude. Agent execution APIs and end-to-end run verification are future integrations. Plan commits require the GitHub token to have repository contents write permission; the current OAuth prototype requests the broad `repo` scope. Use a least-privilege GitHub App before production.
