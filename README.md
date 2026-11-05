@@ -44,3 +44,9 @@ The application scaffold and deployment configuration will be added in the imple
 Open **Planner** from the Sentinel dashboard. Choose a repository, edit its project plan, and select Cursor, ChatGPT, or Claude for the execution handoff. When you click **Run plan**, Sentinel compares the edited plan with the current `plan.md`, creates the file if it is missing, appends a timestamped change summary, and commits the result to that repository.
 
 The current agent connection is a handoff workflow: Sentinel saves the plan and prepares a prompt to copy into the selected agent. It does not silently execute code changes inside Cursor, ChatGPT, or Claude. Agent execution APIs and end-to-end run verification are future integrations. Plan commits require the GitHub token to have repository contents write permission; the current OAuth prototype requests the broad `repo` scope. Use a least-privilege GitHub App before production.
+
+## Plan execution workflow
+
+A plan run now creates a dedicated `sentinel/plan-<timestamp>` branch from the repository's default branch, commits the proposed `plan.md` on that branch, and opens a pull request for review. It does not change the default branch, merge the PR, deploy, or directly invoke an external coding agent.
+
+The Planner prepares a provider-specific handoff prompt for Cursor, ChatGPT, or Claude. The agent must work on the created branch, update plan status with files and test evidence, and leave the PR open. Direct agent API execution, automated run callbacks, and test-result ingestion remain future integrations. The current GitHub OAuth prototype has broad `repo` permissions; use a least-privilege GitHub App before production.
