@@ -1,1 +1,40 @@
 # Sentinel
+
+**See Everything. Build Anything.**
+
+Sentinel is a development command center for monitoring, understanding, and improving the health of projects across GitHub. It is designed as a responsive web application that can also be installed on mobile as a Progressive Web App (PWA).
+
+## Product goals
+
+- Connect multiple GitHub repositories from one account.
+- Show repository, branch, commit, pull request, workflow, build, and deployment health.
+- Inspect code quality, dependencies, security findings, and failing checks.
+- Track features from planned to implemented, tested, and verified.
+- Maintain project architecture notes, decisions, known issues, and recovery guidance.
+- Run scheduled health checks and send actionable alerts.
+- Keep GitHub access read-only by default. Any future write/fix capability must require explicit authorization.
+
+## Planned stack
+
+- Next.js + TypeScript for the responsive web/PWA experience.
+- Cloudflare Pages/Workers for hosting and server-side execution.
+- Neon PostgreSQL for application data.
+- GitHub App/API + webhooks for repository integration.
+- Cloudflare Queues and scheduled Workers for background processing.
+- CodeQL, Semgrep, ESLint, dependency auditing, and project tests for analysis.
+
+## Security principles
+
+- Never copy plaintext environment-variable values or credentials into Sentinel's database, logs, reports, or AI context.
+- Store only variable names, presence/status, and safe provider references unless a separately designed encrypted-secret feature is explicitly enabled.
+- Request the minimum GitHub permissions needed; begin read-only.
+- Treat repository content, issue text, workflow logs, and external webhook payloads as untrusted input.
+- Require explicit approval before changing source code, opening write operations, or triggering deployments.
+
+## Project status
+
+The repository is initialized. The detailed product specification and phased roadmap are in `docs/PRODUCT_SPEC.md` and `docs/ROADMAP.md`.
+
+## Development
+
+The application scaffold and deployment configuration will be added in the implementation phase. Do not add production credentials to this repository.
