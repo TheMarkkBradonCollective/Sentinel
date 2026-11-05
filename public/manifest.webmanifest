@@ -1,0 +1,10 @@
+{
+  "name": "Sentinel — Development Command Center",
+  "short_name": "Sentinel",
+  "description": "See Everything. Build Anything.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
+  "icons": []
+}
