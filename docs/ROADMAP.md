@@ -5,7 +5,7 @@
 - [x] Define product scope, security principles, and implementation phases.
 - [ ] Add the responsive Next.js + TypeScript application scaffold.
 - [ ] Establish linting, formatting, type-checking, and test commands.
-- [ ] Add CI checks for pull requests and the main branch.
+- [x] Add CI checks for pull requests and the main branch.
 
 ## Phase 1 — GitHub connection and inventory
 - [ ] Register/configure a GitHub App.
@@ -31,6 +31,9 @@
 - [ ] Detect regressions and reopened findings.
 
 ## Phase 4 — Planner and feature verification
+- [x] Add a repository-backed plan.md editor and plan commit workflow.
+- [x] Create isolated plan-run branches and review pull requests.
+- [x] Generate Cursor, ChatGPT, and Claude implementation handoff prompts.
 - [ ] Add project goals, blueprints, milestones, and tasks.
 - [ ] Add acceptance criteria and test references.
 - [ ] Track implemented vs. tested vs. verified states.
