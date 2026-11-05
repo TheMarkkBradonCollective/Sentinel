@@ -38,3 +38,4 @@ The repository is initialized. The detailed product specification and phased roa
 ## Development
 
 The application scaffold and deployment configuration will be added in the implementation phase. Do not add production credentials to this repository.
+\n\n## Important production setup\n\nThe OAuth flow is a development-grade first connection, not the final least-privilege installation model. For production use, configure a GitHub App with read-only repository metadata, contents, pull request, issue, and Actions permissions as needed, and let users select installations/repositories. Do not deploy with the broad OAuth `repo` scope as the final permission model.\n
