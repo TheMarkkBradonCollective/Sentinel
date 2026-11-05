@@ -17,7 +17,11 @@ Build a secure, mobile-first development command center that monitors GitHub rep
 - [x] Compare plan revisions and record added/removed line changes.
 - [x] Commit plan.md to GitHub when Run is clicked.
 - [x] Prepare Cursor, ChatGPT, or Claude execution handoff prompt.
-- [ ] Run CI successfully and validate a real deployment.
+- [x] Create a dedicated plan-run branch instead of writing to the default branch.
+- [x] Open a pull request for every plan run and leave it unmerged for human review.
+- [x] Include branch-specific implementation instructions, test requirements, and evidence updates in the agent handoff.
+- [x] Add CI workflow for typecheck, lint, and production build on main and Sentinel plan branches.
+- [ ] Confirm CI results and validate a real deployment.
 
 ## Product requirements
 
@@ -28,7 +32,7 @@ Build a secure, mobile-first development command center that monitors GitHub rep
 - [x] Record timestamps, selected agent, and additions/removals.
 - [x] Preserve GitHub commit history as the audit trail.
 - [ ] Semantic diff that recognizes edits as updates rather than only line removals/additions.
-- [ ] Explicit plan review and approval before agent execution.
+- [x] Explicit plan approval through the user-triggered Run action; PR remains open for human review.
 - [ ] Direct, permissioned integrations with supported coding agents.
 - [ ] Capture agent output, files changed, test results, and verification evidence.
 - [ ] Detect external plan edits and handle concurrent changes safely.
