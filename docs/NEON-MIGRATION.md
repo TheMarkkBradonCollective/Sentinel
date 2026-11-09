@@ -96,7 +96,7 @@ npm run cf:preview    # local Worker via wrangler dev
 npm run cf:deploy     # build and deploy. Requires Cloudflare auth and the secrets above
 ```
 
-`npm run cf:dry-run` compiles the Worker and runs Wrangler's local checks. It does not upload the Worker, and it does not prove that Neon or GitHub credentials work. CI runs the same dry run after the Next.js build. A dry run may still ask Wrangler to identify the account; it must not be used as a substitute for `cf:deploy` when a real release is intended.
+`npm run cf:dry-run` compiles the Worker and runs Wrangler's local checks. It does not upload the Worker, and it does not prove that Neon or GitHub credentials work. `next.config.ts` sets `output: "standalone"` so `next build` writes `.next/standalone`. CI packages that output with `opennextjs-cloudflare build --skipNextBuild` and then runs the same Wrangler dry run. A dry run may still ask Wrangler to identify the account; it must not be used as a substitute for `cf:deploy` when a real release is intended.
 
 Before the first production deploy:
 

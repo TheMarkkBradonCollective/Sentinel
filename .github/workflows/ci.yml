@@ -35,4 +35,6 @@ jobs:
           GITHUB_CLIENT_SECRET: placeholder
           SENTINEL_SESSION_SECRET: this-is-a-ci-only-placeholder-secret-value-32chars
       - name: Cloudflare deploy dry run
+        # Requires the standalone tree from `next build` (`output: "standalone"`).
+        # `--skipNextBuild` does not create `.next/standalone` on its own.
         run: npx opennextjs-cloudflare build --skipNextBuild && npx wrangler deploy --dry-run
