@@ -26,9 +26,13 @@ jobs:
         run: npm run typecheck
       - name: Lint
         run: npm run lint
+      - name: Test
+        run: npm test
       - name: Production build
         run: npm run build
         env:
           GITHUB_CLIENT_ID: placeholder
           GITHUB_CLIENT_SECRET: placeholder
           SENTINEL_SESSION_SECRET: this-is-a-ci-only-placeholder-secret-value-32chars
+      - name: Cloudflare deploy dry run
+        run: npx opennextjs-cloudflare build --skipNextBuild && npx wrangler deploy --dry-run

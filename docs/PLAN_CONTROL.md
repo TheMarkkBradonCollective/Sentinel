@@ -44,7 +44,7 @@ Build Sentinel into a secure, mobile-friendly command center that monitors GitHu
 - [ ] Project architecture and knowledge map.
 - [ ] Feature planner with acceptance criteria and verification states.
 - [ ] Scheduled health checks and notifications.
-- [ ] Neon persistence for users, projects, findings, plans, and audit events.
+- [x] Neon persistence for accounts, repository snapshots, plan-run metadata, and audit events. Findings storage is still future work. Live credentials and deploy remain operator steps.
 
 ## Plan change log
 

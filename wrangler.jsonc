@@ -5,5 +5,21 @@
   "compatibility_date": "2025-09-23",
   "compatibility_flags": ["nodejs_compat"],
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
-  "observability": { "enabled": true }
+  "observability": {
+    "enabled": true,
+    "redact_query_string": true,
+    "logs": { "enabled": true, "head_sampling_rate": 1 },
+    "traces": { "enabled": true, "head_sampling_rate": 1 }
+  },
+  // Secret values are never stored in this file. Set them with `wrangler secret put`.
+  // DATABASE_URL is the pooled Neon connection string (hostname contains -pooler).
+  // Apply SQL with the direct URL from a developer machine. Do not upload NEON_DATABASE_URL_UNPOOLED.
+  "secrets": {
+    "required": [
+      "DATABASE_URL",
+      "GITHUB_CLIENT_ID",
+      "GITHUB_CLIENT_SECRET",
+      "SENTINEL_SESSION_SECRET"
+    ]
+  }
 }
