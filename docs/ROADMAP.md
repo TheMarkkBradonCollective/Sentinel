@@ -19,7 +19,7 @@
 - [ ] Display GitHub Actions workflow and job results.
 - [ ] Add deployment provider integrations and URL inventory.
 - [ ] Add configurable uptime and API health checks.
-- [ ] Add Neon/database connection status checks without exposing credentials.
+- [x] Add Neon/database connection status checks without exposing credentials.
 - [ ] Add environment-variable inventory (names and status only).
 - [ ] Add webhook processing and scheduled background jobs.
 

@@ -44,7 +44,8 @@ Build a secure, mobile-first development command center that monitors GitHub rep
 - [ ] Workflow job-level failure diagnosis.
 - [ ] Deployment provider integrations and production/preview URL inventory.
 - [ ] Uptime and API health checks.
-- [ ] Neon database persistence and scheduled background processing.
+- [x] Neon database persistence for accounts, repository snapshots, health snapshots, plan-run metadata, and audit events. Live credentials and deploy remain operator steps.
+- [ ] Scheduled background processing.
 - [ ] Environment variable inventory by name and configured status only.
 
 ### Code intelligence and security
@@ -78,3 +79,8 @@ Build a secure, mobile-first development command center that monitors GitHub rep
 
 ## Change history
 Sentinel appends a dated summary of plan changes here whenever a plan run is committed.
+
+### 2026-11-09 — Neon persistence
+- Added SQL migrations, the `@neondatabase/serverless` client, and Wrangler secret wiring for `DATABASE_URL`.
+- Repository, health, and plan-run screens now read and write Neon when the secret is set.
+- Migrations were not applied to a live database, and the Worker was not deployed.

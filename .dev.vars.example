@@ -1,0 +1,6 @@
+# Local Worker secrets for `npm run cf:preview`. Copy to .dev.vars.
+# Do not commit .dev.vars. Values here are examples, not credentials.
+DATABASE_URL=postgresql://USER:PASSWORD@ep-example-pooler.region.aws.neon.tech/sentinel?sslmode=require
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+SENTINEL_SESSION_SECRET=

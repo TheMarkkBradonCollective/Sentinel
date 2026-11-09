@@ -5,7 +5,7 @@ const COOKIE = "sentinel_session";
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
-export type SentinelSession = { accessToken: string; login: string; avatarUrl: string; expiresAt: number };
+export type SentinelSession = { accessToken: string; login: string; avatarUrl: string; expiresAt: number; githubId?: number };
 
 function toBase64Url(bytes: Uint8Array) {
   let binary = "";

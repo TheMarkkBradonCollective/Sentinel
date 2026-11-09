@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { saveSession } from "@/lib/session";
-export const runtime = "edge";
+import { recordGithubConnection } from "@/lib/db/persist";
+import { sealSession } from "@/lib/session";
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
@@ -21,13 +21,20 @@ export async function GET(request: NextRequest) {
     headers: { Authorization: `Bearer ${tokenData.access_token}`, Accept: "application/vnd.github+json", "User-Agent": "Sentinel-Command-Center" }
   });
   if (!userResponse.ok) return fail("github_profile_failed");
-  const user = await userResponse.json() as { login: string; avatar_url: string };
+  const user = await userResponse.json() as { id: number; login: string; avatar_url: string };
+  if (!Number.isSafeInteger(user.id) || user.id <= 0) return fail("github_profile_failed");
+  const recorded = await recordGithubConnection({ githubId: String(user.id), login: user.login, avatarUrl: user.avatar_url });
+  if (!recorded.ok && recorded.reason === "unavailable") {
+    console.error(JSON.stringify({ event: "persistence_failed", action: "github.connected", reason: recorded.reason }));
+  }
   const response = NextResponse.redirect(new URL("/", request.url));
-  // Set the encrypted, HttpOnly session cookie on this response.
-  const sessionCookie = await (async () => {
-    const { sealSession } = await import("@/lib/session");
-    return sealSession({ accessToken: tokenData.access_token!, login: user.login, avatarUrl: user.avatar_url, expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000 });
-  })();
+  const sessionCookie = await sealSession({
+    accessToken: tokenData.access_token!,
+    login: user.login,
+    avatarUrl: user.avatar_url,
+    expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    githubId: user.id,
+  });
   response.cookies.set("sentinel_session", sessionCookie, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 7 });
   response.cookies.delete("sentinel_oauth_state");
   return response;

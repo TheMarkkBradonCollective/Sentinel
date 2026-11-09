@@ -18,7 +18,7 @@ Sentinel is a development command center for monitoring, understanding, and impr
 
 - Next.js + TypeScript for the responsive web/PWA experience.
 - Cloudflare Pages/Workers for hosting and server-side execution.
-- Neon PostgreSQL for application data.
+- Neon PostgreSQL for application data. Connection setup, migrations, secrets, and deploy steps are in `docs/NEON-MIGRATION.md`.
 - GitHub App/API + webhooks for repository integration.
 - Cloudflare Queues and scheduled Workers for background processing.
 - CodeQL, Semgrep, ESLint, dependency auditing, and project tests for analysis.
@@ -37,8 +37,27 @@ The repository is initialized. The detailed product specification and phased roa
 
 ## Development
 
-The application scaffold and deployment configuration will be added in the implementation phase. Do not add production credentials to this repository.
-\n\n## Important production setup\n\nThe OAuth flow is a development-grade first connection, not the final least-privilege installation model. For production use, configure a GitHub App with read-only repository metadata, contents, pull request, issue, and Actions permissions as needed, and let users select installations/repositories. Do not deploy with the broad OAuth `repo` scope as the final permission model.\n
+```bash
+npm install
+npm run dev          # Next.js, reads .env.local
+npm test             # URL, SQL, and migration checks. No database required
+npm run typecheck
+npm run lint
+npm run build
+npm run db:neon:apply   # direct Neon URL, see docs/NEON-MIGRATION.md
+npm run db:neon:check   # pooled Neon URL
+npm run cf:build
+npm run cf:dry-run      # package the Worker without uploading it
+npm run cf:preview      # local Worker, reads .dev.vars
+npm run cf:deploy       # uploads the Worker. Do this only with real credentials
+```
+
+Copy `.env.example` to `.env.local` and `.dev.vars.example` to `.dev.vars`. Do not commit real credentials. `DATABASE_URL` is a Wrangler secret (pooled Neon URL). Schema changes use `NEON_DATABASE_URL_UNPOOLED` and are not uploaded to the Worker.
+
+## Important production setup
+
+The OAuth flow is a development-grade first connection, not the final least-privilege installation model. For production use, configure a GitHub App with read-only repository metadata, contents, pull request, issue, and Actions permissions as needed, and let users select installations/repositories. Do not deploy with the broad OAuth `repo` scope as the final permission model.
+
 ## Project plan control
 
 Open **Planner** from the Sentinel dashboard. Choose a repository, edit its project plan, and select Cursor, ChatGPT, or Claude for the execution handoff. When you click **Run plan**, Sentinel compares the edited plan with the current `plan.md`, creates the file if it is missing, appends a timestamped change summary, and commits the result to that repository.

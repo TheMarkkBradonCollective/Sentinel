@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Activity, AlertTriangle, ArrowLeft, ArrowUpRight, GitBranch, GitPullRequest, Github, ShieldCheck, Workflow } from "lucide-react";
+import { recordHealthSnapshot } from "@/lib/db/persist";
 import { requireSession } from "@/lib/session";
 import { getRepoOverview } from "@/lib/github";
 
-export const runtime = "edge";
 export default async function ProjectPage({ params }: { params: Promise<{ owner: string; repo: string }> }) {
   const { owner, repo } = await params;
   const session = await requireSession();
@@ -13,6 +13,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ owner:
   catch { notFound(); }
   const { details, workflows, pulls, issues } = data;
   const latest = workflows[0];
+  const snapshot = await recordHealthSnapshot(session, details, { name: latest?.name ?? null, status: latest?.status ?? null, conclusion: latest?.conclusion ?? null });
+  const snapshotLabel = snapshot.ok ? "Saved" : snapshot.reason === "not_configured" ? "Not configured" : "Not saved";
   const status = latest?.conclusion === "success" ? "Passing" : latest?.conclusion === "failure" ? "Failing" : latest ? latest.status : "No workflow data";
   return <main className="project-page">
     <header className="project-top"><Link href="/" className="back-link"><ArrowLeft size={16}/> All projects</Link><a href={details.html_url} target="_blank" rel="noreferrer" className="external-link">Open on GitHub <ArrowUpRight size={14}/></a></header>
@@ -38,6 +40,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ owner:
         <div className="health-line"><span>Latest workflow status</span><b className={latest?.conclusion === "success" ? "healthy" : latest?.conclusion === "failure" ? "unhealthy" : ""}>{status}</b></div>
         <div className="health-line"><span>Repository archived</span><b>{details.archived ? "Yes" : "No"}</b></div>
         <div className="health-line"><span>Last repository update</span><b>{new Date(details.updated_at).toLocaleString()}</b></div>
+        <div className="health-line"><span>Neon snapshot</span><b className={snapshot.ok ? "healthy" : ""}>{snapshotLabel}</b></div>
         <div className="disclaimer"><ShieldCheck size={14}/> This is a live GitHub snapshot, not a complete security or uptime audit.</div>
       </section>
     </div>

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-export const runtime = "edge";
 export async function GET(request: NextRequest) {
   const clientId = process.env.GITHUB_CLIENT_ID;
   if (!clientId) return NextResponse.redirect(new URL("/?error=github_not_configured", request.url));

@@ -8,23 +8,31 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test src/lib/db/*.test.ts",
+    "db:neon:apply": "tsx scripts/neon/apply-migrations.ts",
+    "db:neon:check": "tsx scripts/neon/check-connection.ts",
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+    "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf:dry-run": "opennextjs-cloudflare build && wrangler deploy --dry-run"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "lucide-react": "^0.468.0",
     "next": "15.5.6",
+    "pg": "^8.16.3",
     "react": "19.1.1",
-    "react-dom": "19.1.1",
-    "lucide-react": "^0.468.0"
+    "react-dom": "19.1.1"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^1.6.5",
+    "@opennextjs/cloudflare": "1.6.5",
     "@types/node": "^22.15.0",
+    "@types/pg": "^8.15.5",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "eslint": "^9.28.0",
     "eslint-config-next": "15.5.6",
+    "tsx": "^4.20.5",
     "typescript": "^5.8.3",
     "wrangler": "^4.20.0"
   }

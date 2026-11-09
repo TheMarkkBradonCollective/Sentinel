@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { recordPlanRun } from "@/lib/db/persist";
 import { readSession } from "@/lib/session";
-export const runtime = "edge";
 const GH = "https://api.github.com";
 const ghHeaders = (token: string) => ({ Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "Sentinel-Command-Center" });
 function validate(owner: string, repo: string) {
@@ -102,11 +102,26 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         body: `## Sentinel plan run\n\n- Agent handoff: **${provider}**\n- Plan file: [plan.md](../blob/${branch}/plan.md)\n- Added: ${changes.added.length}\n- Removed: ${changes.removed.length}\n- Possible updates: ${changes.updated}\n\n### Required workflow\n1. Review the plan and implement on this branch only.\n2. Run relevant checks and record actual results in plan.md.\n3. Do not deploy or merge.\n4. Leave this PR open for human review.\n\nSentinel does not automatically execute the external coding agent or merge this pull request.`
       })
     });
+    const recorded = await recordPlanRun(session, {
+      repositoryFullName: `${owner}/${repo}`,
+      provider,
+      branch,
+      baseBranch: base,
+      pullRequestUrl: pr.html_url,
+      pullRequestNumber: pr.number,
+      commitSha: writeResult.commit?.sha || null,
+      addedCount: changes.added.length,
+      removedCount: changes.removed.length,
+      updatedCount: changes.updated,
+    });
+    const persistence = recorded.ok
+      ? { ok: true as const }
+      : { ok: false as const, reason: recorded.reason, message: recorded.message };
     return NextResponse.json({
       ok: true, created: !current, branch, base, commit: writeResult.commit?.sha || null,
       url: writeResult.content?.html_url || `https://github.com/${owner}/${repo}/blob/${branch}/plan.md`,
       pullRequest: pr.html_url, pullRequestNumber: pr.number,
-      changes, provider, timestamp, handoff
+      changes, provider, timestamp, handoff, persistence
     });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Unable to create the plan run." }, { status: 400 });
